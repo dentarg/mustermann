@@ -12,9 +12,17 @@ module Mustermann
     class Expander < Translator
       raises ExpandError
 
-      translate Array do |*args|
-        inject(t.pattern) do |pattern, element|
-          t.add_to(pattern, t(element, *args))
+      if RUBY_VERSION < "3"
+        translate Array do |*args|
+          inject(t.pattern) do |pattern, element|
+            t.add_to(pattern, t(element, *args))
+          end
+        end
+      else
+        translate Array do |*args, **kwargs|
+          inject(t.pattern) do |pattern, element|
+            t.add_to(pattern, t(element, *args, **kwargs))
+          end
         end
       end
 

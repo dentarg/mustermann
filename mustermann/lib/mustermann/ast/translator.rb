@@ -37,9 +37,16 @@ module Mustermann
 
         # shorthand for translating a nested object
         # @!visibility private
-        ruby2_keywords def t(*args, &block)
-          return translator unless args.any?
-          translator.translate(*args, &block)
+        if RUBY_VERSION < "3"
+          ruby2_keywords def t(*args, &block)
+            return translator unless args.any?
+            translator.translate(*args, &block)
+          end
+        else
+          def t(*args, **kwargs, &block)
+            return translator unless args.any?
+            translator.translate(*args, **kwargs, &block)
+          end
         end
 
         # @!visibility private
@@ -73,7 +80,6 @@ module Mustermann
         Class.new(const_get(:NodeTranslator)) do
           register(*types)
           define_method(:translate, &block)
-          ruby2_keywords :translate
         end
       end
 
