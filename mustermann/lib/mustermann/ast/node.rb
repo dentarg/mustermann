@@ -1,3 +1,5 @@
+require 'ruby2_keywords'
+
 module Mustermann
   # @see Mustermann::AST::Pattern
   module AST
@@ -35,7 +37,7 @@ module Mustermann
       # Helper for creating a new instance and calling #parse on it.
       # @return [Mustermann::AST::Node]
       # @!visibility private
-      def self.parse(*args, &block)
+      ruby2_keywords def self.parse(*args, &block)
         new(*args).tap { |n| n.parse(&block) }
       end
 
